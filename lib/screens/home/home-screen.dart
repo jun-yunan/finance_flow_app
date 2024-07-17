@@ -1,3 +1,5 @@
+import 'package:finance_flow_app/components/home/label-item.dart';
+import 'package:finance_flow_app/components/home/segmented-time-frame.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -8,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _isDaily = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,19 +221,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 child: ListView(
-                  children: const [
-                    Text("Hi, Welcome Back",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 152,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(31),
+                        color: const Color(0xff00d09e),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    const SegmentedTimeFrame()
                   ],
                 ),
               ),

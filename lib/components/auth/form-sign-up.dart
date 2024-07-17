@@ -3,6 +3,7 @@ import 'package:finance_flow_app/components/button/button-custom.dart';
 import 'package:finance_flow_app/controllers/AuthController.dart';
 import 'package:finance_flow_app/screens/auth/sign-in/sign-in-screen.dart';
 import 'package:finance_flow_app/screens/auth/sign-up/sign-up-screen.dart';
+import 'package:finance_flow_app/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,16 +20,25 @@ class _FormSignUpState extends State<FormSignUp> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submitForm() {
+  void submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Xử lý dữ liệu sau khi xác thực thành công
       final email = authController.emailController.value.text;
       final password = authController.passwordController.value.text;
+      final confirmPassword =
+          authController.confirmPasswordController.value.text;
+      final mobileNumber = authController.mobileNumber.value.text;
+      final dateOfBirth = authController.dateOfBirth.value.text;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email: $email, Password: $password')),
+        SnackBar(
+            content: Text(
+          'Email: $email, Password: $password, MobileNumber: $mobileNumber, DateOfBirth: $dateOfBirth',
+        )),
       );
-      authController.emailController.value.clear();
-      authController.passwordController.value.clear();
+      await authController.signUpEmailAndPassword(
+          emailAddress: email, password: password);
+
+      authController.resetFormSignUp();
+      // showSnackbar(message: "message", style: SnackBarStyle.success);
     }
   }
 
@@ -52,7 +62,7 @@ class _FormSignUpState extends State<FormSignUp> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: authController.emailController.value,
+              controller: authController.nameController.value,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 hintText: 'example@example.com',
@@ -128,7 +138,7 @@ class _FormSignUpState extends State<FormSignUp> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: authController.emailController.value,
+              controller: authController.mobileNumber.value,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 hintText: '+84 123 456 789',
@@ -165,7 +175,7 @@ class _FormSignUpState extends State<FormSignUp> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: authController.emailController.value,
+              controller: authController.dateOfBirth.value,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 hintText: 'DD / MM / YYYY',
@@ -258,7 +268,7 @@ class _FormSignUpState extends State<FormSignUp> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: authController.passwordController.value,
+              controller: authController.confirmPasswordController.value,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 hintText: "●●●●●●●●",
@@ -308,9 +318,9 @@ class _FormSignUpState extends State<FormSignUp> {
               title: "Sign Up",
               variant: ButtonVariant.primary,
               onPressed: () {
-                authController.authType.value = AuthType.signUp;
-                // Get.toNamed('/sign-up');
-                Get.to(() => const SignUpScreen());
+                // authController.authType.value = AuthType.signUp;
+                // Get.to(() => const SignUpScreen());
+                submitForm();
               },
             ),
             const SizedBox(

@@ -20,19 +20,20 @@ class _FormLoginState extends State<FormLogin> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submitForm() {
-    // if (_formKey.currentState!.validate()) {
-    //   // Xử lý dữ liệu sau khi xác thực thành công
-    //   final email = authController.emailController.value.text;
-    //   final password = authController.passwordController.value.text;
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text('Email: $email, Password: $password')),
-    //   );
-    //   authController.emailController.value.clear();
-    //   authController.passwordController.value.clear();
-    // }
-
-    Get.to(() => const DashboardScreen());
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Xử lý dữ liệu sau khi xác thực thành công
+      final email = authController.emailController.value.text;
+      final password = authController.passwordController.value.text;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Email: $email, Password: $password')),
+      );
+      await authController.signInEmailAndPassword(
+        emailAddress: email,
+        password: password,
+        context: context,
+      );
+    }
   }
 
   @override

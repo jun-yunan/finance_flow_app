@@ -1,4 +1,5 @@
 import 'package:finance_flow_app/screens/home/home-screen.dart';
+import 'package:finance_flow_app/screens/profile/profile-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -16,7 +17,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const Center(child: Text('Search Page')),
     const Center(child: Text('Profile Page')),
     const Center(child: Text('Profile Page')),
-    const Center(child: Text('Profile Page')),
+    const ProfileScreen(),
   ];
 
   void _onTabTapped(int index) {
@@ -46,25 +47,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: _onTabTapped,
-            backgroundColor: Color.fromARGB(255, 2, 82, 92),
+            showSelectedLabels: false,
+            backgroundColor: const Color(0xffDFF7E2),
             items: [
               BottomNavigationBarItem(
+                backgroundColor: const Color(0xffDFF7E2),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff00D09E),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: SvgPicture.asset('assets/icons/Home.svg'),
+                ),
                 icon: SvgPicture.asset('assets/icons/Home.svg'),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
+                backgroundColor: const Color(0xffDFF7E2),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff00D09E),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: SvgPicture.asset('assets/icons/Analysis.svg'),
+                ),
                 icon: SvgPicture.asset('assets/icons/Analysis.svg'),
                 label: 'Analysis',
               ),
               BottomNavigationBarItem(
+                backgroundColor: const Color(0xffDFF7E2),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff00D09E),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: SvgPicture.asset('assets/icons/Transactions.svg'),
+                ),
                 icon: SvgPicture.asset('assets/icons/Transactions.svg'),
                 label: 'Transactions',
               ),
               BottomNavigationBarItem(
+                backgroundColor: const Color(0xffDFF7E2),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff00D09E),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: SvgPicture.asset('assets/icons/Category.svg'),
+                ),
                 icon: SvgPicture.asset('assets/icons/Category.svg'),
                 label: 'Category',
               ),
               BottomNavigationBarItem(
+                backgroundColor: const Color(0xffDFF7E2),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff00D09E),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: SvgPicture.asset('assets/icons/Profile.svg'),
+                ),
                 icon: SvgPicture.asset('assets/icons/Profile.svg'),
                 label: 'Profile',
               ),
