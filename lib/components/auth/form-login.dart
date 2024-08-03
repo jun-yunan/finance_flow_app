@@ -197,7 +197,11 @@ class _FormLoginState extends State<FormLogin> {
                   src: 'assets/images/facebook.png',
                   onPressed: () {},
                 ),
-                ButtonSocial(src: 'assets/images/google.png', onPressed: () {}),
+                ButtonSocial(
+                    src: 'assets/images/google.png',
+                    onPressed: () {
+                      authController.signInWithGoogle(context);
+                    }),
                 ButtonSocial(src: 'assets/images/github.png', onPressed: () {}),
               ],
             ),

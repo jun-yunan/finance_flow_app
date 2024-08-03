@@ -1,4 +1,6 @@
 import 'package:finance_flow_app/controllers/AuthController.dart';
+import 'package:finance_flow_app/controllers/ProfileController.dart';
+import 'package:finance_flow_app/screens/profile/edit-profile/edit-profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -9,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.find();
+    final ProfileController profileController = Get.put(ProfileController());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -74,25 +77,26 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 child: ListView(
                   children: [
-                    const Column(
+                    Column(
                       children: [
-                        SizedBox(height: 50),
+                        const SizedBox(height: 50),
                         Text(
-                          "John Smith",
-                          style: TextStyle(
+                          profileController.user.value!.name,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Text(
-                          "ID: 25030024",
-                          style: TextStyle(
+                          "ID: ${profileController.user.value!.id}",
+                          style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
                         )
                       ],
                     ),
+                    const SizedBox(height: 20),
                     ListTile(
                       leading: SvgPicture.asset(
                         'assets/icons/profile_icon.svg',
@@ -106,7 +110,9 @@ class ProfileScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const EditProfile());
+                      },
                     ),
                     const SizedBox(
                       height: 34,
@@ -148,10 +154,23 @@ class ProfileScreen extends StatelessWidget {
                       height: 34,
                     ),
                     ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/help_icon.svg',
+                      leading: Container(
                         width: 57,
                         height: 53,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff6cb5fd),
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        // child: SvgPicture.asset(
+                        //   'assets/icons/help_icon.svg',
+                        //   width: 10,
+                        //   height: 10,
+                        // ),
+                        child: const Icon(
+                          size: 36,
+                          Icons.help_outline,
+                          color: Colors.white,
+                        ),
                       ),
                       title: const Text(
                         "Help",

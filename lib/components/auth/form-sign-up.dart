@@ -2,8 +2,6 @@ import 'package:finance_flow_app/components/auth/button-social.dart';
 import 'package:finance_flow_app/components/button/button-custom.dart';
 import 'package:finance_flow_app/controllers/AuthController.dart';
 import 'package:finance_flow_app/screens/auth/sign-in/sign-in-screen.dart';
-import 'package:finance_flow_app/screens/auth/sign-up/sign-up-screen.dart';
-import 'package:finance_flow_app/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,8 +24,8 @@ class _FormSignUpState extends State<FormSignUp> {
       final password = authController.passwordController.value.text;
       final confirmPassword =
           authController.confirmPasswordController.value.text;
-      final mobileNumber = authController.mobileNumber.value.text;
-      final dateOfBirth = authController.dateOfBirth.value.text;
+      final mobileNumber = authController.mobileNumberController.value.text;
+      final dateOfBirth = authController.dateOfBirthController.value.text;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
@@ -125,80 +123,92 @@ class _FormSignUpState extends State<FormSignUp> {
                 return null;
               },
             ),
-            const SizedBox(height: 18),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                "Mobile Number",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: authController.mobileNumber.value,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                hintText: '+84 123 456 789',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                filled: true,
-                fillColor: const Color(0xffdff7e2),
-              ),
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your full name';
-                }
+            // const SizedBox(height: 18),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 10),
+            //   child: Text(
+            //     "Mobile Number",
+            //     style: TextStyle(
+            //       fontSize: 15,
+            //       fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // TextFormField(
+            //   controller: authController.mobileNumberController.value,
+            //   decoration: InputDecoration(
+            //     contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            //     hintText: '+84 123 456 789',
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide.none,
+            //       borderRadius: BorderRadius.circular(18),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide.none,
+            //       borderRadius: BorderRadius.circular(18),
+            //     ),
+            //     filled: true,
+            //     fillColor: const Color(0xffdff7e2),
+            //   ),
+            //   keyboardType: TextInputType.phone,
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return 'Please enter your full name';
+            //     }
 
-                return null;
-              },
-            ),
-            const SizedBox(height: 18),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                "Date Of Birth",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: authController.dateOfBirth.value,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                hintText: 'DD / MM / YYYY',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                filled: true,
-                fillColor: const Color(0xffdff7e2),
-              ),
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your full name';
-                }
+            //     return null;
+            //   },
+            // ),
+            // const SizedBox(height: 18),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 10),
+            //   child: Text(
+            //     "Date Of Birth",
+            //     style: TextStyle(
+            //       fontSize: 15,
+            //       fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // TextFormField(
+            //   controller: authController.dateOfBirthController.value,
+            //   onTap: () async {
+            //     final DateTime? date = await showDatePicker(
+            //       context: context,
+            //       initialDate: DateTime.now(),
+            //       firstDate: DateTime(1900),
+            //       lastDate: DateTime.now(),
+            //     );
+            //     if (date != null) {
+            //       authController.dateOfBirthController.value.text =
+            //           date.toIso8601String().substring(0, 10);
+            //     }
+            //   },
+            //   decoration: InputDecoration(
+            //     contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            //     hintText: 'DD / MM / YYYY',
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide.none,
+            //       borderRadius: BorderRadius.circular(18),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide.none,
+            //       borderRadius: BorderRadius.circular(18),
+            //     ),
+            //     filled: true,
+            //     fillColor: const Color(0xffdff7e2),
+            //   ),
+            //   keyboardType: TextInputType.phone,
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return 'Please enter your full name';
+            //     }
 
-                return null;
-              },
-            ),
+            //     return null;
+            //   },
+            // ),
             const SizedBox(height: 18),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -372,9 +382,10 @@ class _FormSignUpState extends State<FormSignUp> {
                   child: const Text(
                     "Sign In",
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff3299FF)),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff3299FF),
+                    ),
                   ),
                 ),
               ],

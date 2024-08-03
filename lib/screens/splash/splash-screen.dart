@@ -1,6 +1,7 @@
 import 'package:finance_flow_app/components/logo-brand.dart';
 import 'package:finance_flow_app/controllers/AuthController.dart';
 import 'package:finance_flow_app/screens/auth/auth-screen.dart';
+import 'package:finance_flow_app/screens/dashboard/dashboard-screen.dart';
 import 'package:finance_flow_app/screens/home/home-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,13 +23,14 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(
       const Duration(seconds: 4),
       () async {
-        bool isLoggedIn = authController.isLogged.value;
+        bool isLoggedIn = await authController.checkIsLogged();
+        // bool isLoggedIn = false;
         if (isLoggedIn == true) {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => const DashboardScreen(),
             ),
           );
         } else {
