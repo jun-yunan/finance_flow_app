@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'package:finance_flow_app/components/profile/dialog-upload-image.dart';
 import 'package:finance_flow_app/components/profile/form-edit-profile.dart';
 import 'package:finance_flow_app/controllers/ProfileController.dart';
+import 'package:finance_flow_app/models/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,11 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
+
+    final user = UserModel.fromJson(
+        profileController.userStream.value!.data() as Map<String, dynamic>);
+
+    print("bla ${user.name}");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -83,39 +89,74 @@ class EditProfile extends StatelessWidget {
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Obx(
-                      () => Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
                           color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+                          width: 2,
                         ),
-                        child: profileController.image.value != null
-                            ? ClipRRect(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      // child: user.avatar.isNotEmpty
+                      //     ? ClipRRect(
+                      //         borderRadius: BorderRadius.circular(60),
+                      //         child: Image.network(user.avatar),
+                      //       )
+                      //     : ClipRRect(
+                      //         borderRadius: BorderRadius.circular(60),
+                      //         child: Image.asset(
+                      //           'assets/images/avatar-default.png',
+                      //         ),
+                      //       ),
+                      child: StreamBuilder(
+                        stream: profileController.getProfileStream(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(60),
-                                child: Image.file(
-                                  File(profileController.image.value!.path),
-                                ),
-                              )
-                            : ClipRRect(
+                                child: const CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(60),
-                                child: Image.asset(
-                                  'assets/images/avatar-default.png',
+                                child: const Icon(
+                                  Icons.error,
+                                  size: 30,
                                 ),
                               ),
+                            );
+                          }
+                          final UserModel user =
+                              UserModel.fromJson(snapshot.data.data());
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: user.avatar.isNotEmpty
+                                ? Image.network(
+                                    user.avatar,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    "assets/images/avatar-default.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                          );
+                        },
                       ),
                     ),
                     Positioned(
@@ -123,7 +164,10 @@ class EditProfile extends StatelessWidget {
                       right: -10,
                       child: IconButton(
                         onPressed: () async {
-                          await profileController.pickImage();
+                          // await profileController.pickImage();
+                          Get.dialog(
+                            DialogUploadImage(avatarUrl: user.avatar),
+                          );
                         },
                         icon: Container(
                           padding: const EdgeInsets.all(4),

@@ -5,7 +5,6 @@ import 'package:finance_flow_app/controllers/ProfileController.dart';
 import 'package:finance_flow_app/models/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class FormEditProfile extends StatelessWidget {
   const FormEditProfile({super.key});
@@ -37,9 +36,9 @@ class FormEditProfile extends StatelessWidget {
           ));
         }
         final UserModel user = UserModel.fromJson(snapshot.data.data());
-        nameController.text = user.name!;
-        emailController.text = user.email!;
-        phoneController.text = user.mobileNumber!;
+        nameController.text = user.name;
+        emailController.text = user.email;
+        phoneController.text = user.mobileNumber;
         dateOfBirthController.text = user.dateOfBirth.toString();
 
         return ListView(
@@ -48,7 +47,7 @@ class FormEditProfile extends StatelessWidget {
               children: [
                 const SizedBox(height: 50),
                 Text(
-                  user.name!,
+                  user.name,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -85,6 +84,7 @@ class FormEditProfile extends StatelessWidget {
             FieldInput(
               label: "Date Of Birth",
               controller: dateOfBirthController,
+              readOnly: true,
               onTap: () {
                 showDatePicker(
                   context: context,
@@ -92,7 +92,7 @@ class FormEditProfile extends StatelessWidget {
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
                 ).then((value) {
-                  dateOfBirthController.text = value!.toString();
+                  dateOfBirthController.text = value.toString();
                 });
               },
             ),

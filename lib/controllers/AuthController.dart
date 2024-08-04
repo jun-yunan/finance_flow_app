@@ -72,6 +72,11 @@ class AuthController extends GetxController {
     prefs.setBool('isLogged', true);
   }
 
+  Future<void> setIsLogout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLogged', false);
+  }
+
   Future<bool> checkIsLogged() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     firebaseAuth.authStateChanges().listen((User? user) {
@@ -187,6 +192,7 @@ class AuthController extends GetxController {
       if (firebaseAuth.currentUser!.providerData[0].providerId ==
           'google.com') {
         await GoogleSignIn().signOut().then((value) {
+          setIsLogout();
           showSnackbar(
               message: "Logout successfully", style: SnackBarStyle.success);
           Navigator.pushAndRemoveUntil(
@@ -196,6 +202,7 @@ class AuthController extends GetxController {
         });
       } else {
         await firebaseAuth.signOut().then((value) {
+          setIsLogout();
           showSnackbar(
               message: "Logout successfully", style: SnackBarStyle.success);
           Navigator.pushAndRemoveUntil(
@@ -232,14 +239,30 @@ class AuthController extends GetxController {
 
       final User? user = userCredential.user;
       if (user != null) {
-        setIsLogged();
-        print('Login successfully ${user.displayName}');
-        showSnackbar(
-            message: "Login successfully", style: SnackBarStyle.success);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            (route) => false);
+        final UserModel userModel = UserModel(
+          id: user.uid,
+          email: user.email!,
+          name: user.displayName!,
+          dateOfBirth: DateTime.now(),
+          mobileNumber: "",
+          avatar: user.photoURL!,
+          address: "",
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+        await db
+            .collection('users')
+            .doc(user.uid)
+            .set(userModel.toJson())
+            .then((value) {
+          showSnackbar(
+              message: "Login successfully", style: SnackBarStyle.success);
+          setIsLogged();
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const DashboardScreen()),
+              (route) => false);
+        });
       } else {
         print('Login Failed');
         showSnackbar(message: "Login Failed", style: SnackBarStyle.error);

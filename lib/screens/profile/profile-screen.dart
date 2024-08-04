@@ -1,5 +1,6 @@
 import 'package:finance_flow_app/controllers/AuthController.dart';
 import 'package:finance_flow_app/controllers/ProfileController.dart';
+import 'package:finance_flow_app/models/UserModel.dart';
 import 'package:finance_flow_app/screens/profile/edit-profile/edit-profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +13,9 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthController authController = Get.find();
     final ProfileController profileController = Get.put(ProfileController());
+    // final UserModel user = UserModel.fromJson(
+    //     profileController.userStream.value?.data() as Map<String, dynamic>);
+    // profileController.updateUser(user);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -77,24 +81,47 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 child: ListView(
                   children: [
-                    Column(
-                      children: [
-                        const SizedBox(height: 50),
-                        Text(
-                          profileController.user.value!.name,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Text(
-                          "ID: ${profileController.user.value!.id}",
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      ],
+                    StreamBuilder(
+                      stream: profileController.getProfileStream(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return const Center(
+                              child: Text(
+                            'Something went wrong',
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ));
+                        }
+                        final UserModel user =
+                            UserModel.fromJson(snapshot.data.data());
+                        return Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            Text(
+                              user.name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              "ID: ${user.id}",
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     ListTile(
@@ -198,7 +225,32 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        authController.signOut(context);
+                        Get.dialog(
+                          AlertDialog(
+                            title: const Text("Logout"),
+                            content:
+                                const Text("Are you sure you want to logout?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  authController.signOut(context);
+                                  Get.delete<ProfileController>();
+                                  // Get.delete<AuthController>();
+                                },
+                                child: const Text("Logout"),
+                              ),
+                            ],
+                          ),
+                        );
+                        // authController.signOut(context);
+                        // Get.delete<ProfileController>();
+                        // Get.delete<AuthController>();
                       },
                     ),
                   ],
@@ -210,7 +262,64 @@ class ProfileScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  child: Image.asset('assets/images/avatar-default.png'),
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: StreamBuilder(
+                    stream: profileController.getProfileStream(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: const CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Image.asset(
+                            'assets/images/avatar-default.png',
+                          ),
+                        );
+                      }
+
+                      if (snapshot.hasData) {
+                        final UserModel user =
+                            UserModel.fromJson(snapshot.data?.data());
+
+                        // profileController.user.value = user;
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: user.avatar.isNotEmpty
+                              ? Image.network(
+                                  user.avatar,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/images/avatar-default.png',
+                                  fit: BoxFit.cover,
+                                ),
+                        );
+                      }
+
+                      return const SizedBox();
+                    },
+                  ),
                 ),
               ),
             ),
