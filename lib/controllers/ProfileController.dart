@@ -132,7 +132,7 @@ class ProfileController extends GetxController {
         name: name,
         dateOfBirth: DateTime.parse(dateOfBirth),
         mobileNumber: mobileNumber,
-        avatar: "",
+        avatar: user.value!.avatar,
         address: "",
         updatedAt: DateTime.now(),
         createdAt: user.value!.createdAt,

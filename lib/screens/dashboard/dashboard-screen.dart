@@ -1,3 +1,4 @@
+import 'package:finance_flow_app/components/transaction/dialog-add-transaction.dart';
 import 'package:finance_flow_app/screens/home/home-screen.dart';
 import 'package:finance_flow_app/screens/profile/profile-screen.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const DialogAddTransaction();
+            },
+          );
+        },
+        backgroundColor: const Color(0xff00D09E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        tooltip: "Add Transaction",
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [

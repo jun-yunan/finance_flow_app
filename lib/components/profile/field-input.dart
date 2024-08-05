@@ -7,6 +7,8 @@ class FieldInput extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? readOnly;
   final void Function()? onTap;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
 
   const FieldInput({
     super.key,
@@ -16,6 +18,8 @@ class FieldInput extends StatelessWidget {
     this.keyboardType,
     this.onTap,
     this.readOnly,
+    this.prefixIcon,
+    this.suffixIcon,
   });
 
   @override
@@ -33,15 +37,26 @@ class FieldInput extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 4),
           TextField(
             readOnly: readOnly ?? false,
             controller: controller,
             keyboardType: keyboardType,
             onTap: onTap,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              prefixIcon: prefixIcon,
+              suffixIcon: suffixIcon,
               hintText: hintText,
+              hintStyle: const TextStyle(
+                color: Color(0xffa5a5a5),
+                fontSize: 16,
+              ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(18),

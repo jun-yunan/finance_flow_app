@@ -146,9 +146,9 @@ class EditProfile extends StatelessWidget {
                               UserModel.fromJson(snapshot.data.data());
                           return ClipRRect(
                             borderRadius: BorderRadius.circular(60),
-                            child: user.avatar.isNotEmpty
+                            child: user.avatar!.isNotEmpty
                                 ? Image.network(
-                                    user.avatar,
+                                    user.avatar!,
                                     fit: BoxFit.cover,
                                   )
                                 : Image.asset(
@@ -166,7 +166,7 @@ class EditProfile extends StatelessWidget {
                         onPressed: () async {
                           // await profileController.pickImage();
                           Get.dialog(
-                            DialogUploadImage(avatarUrl: user.avatar),
+                            DialogUploadImage(avatarUrl: user.avatar!),
                           );
                         },
                         icon: Container(

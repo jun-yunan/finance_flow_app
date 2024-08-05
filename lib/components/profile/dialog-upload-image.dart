@@ -25,10 +25,12 @@ class DialogUploadImage extends StatelessWidget {
             ],
           ),
           IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(Icons.close))
+            onPressed: () {
+              Get.back();
+              profileController.image.value = null;
+            },
+            icon: const Icon(Icons.close),
+          )
         ],
       ),
       content: Column(

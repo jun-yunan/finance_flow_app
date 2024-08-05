@@ -2,7 +2,6 @@ import 'package:finance_flow_app/components/logo-brand.dart';
 import 'package:finance_flow_app/controllers/AuthController.dart';
 import 'package:finance_flow_app/screens/auth/auth-screen.dart';
 import 'package:finance_flow_app/screens/dashboard/dashboard-screen.dart';
-import 'package:finance_flow_app/screens/home/home-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
