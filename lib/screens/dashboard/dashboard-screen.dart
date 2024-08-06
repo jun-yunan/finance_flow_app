@@ -1,8 +1,10 @@
 import 'package:finance_flow_app/components/transaction/dialog-add-transaction.dart';
+import 'package:finance_flow_app/controllers/ProfileController.dart';
 import 'package:finance_flow_app/screens/home/home-screen.dart';
 import 'package:finance_flow_app/screens/profile/profile-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

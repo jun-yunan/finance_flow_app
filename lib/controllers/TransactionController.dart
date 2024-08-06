@@ -12,9 +12,10 @@ enum TransactionType {
 
 class TransactionController extends GetxController {
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
     getUid();
+    // await getListTransaction();
     super.onInit();
   }
 
@@ -46,6 +47,8 @@ class TransactionController extends GetxController {
   final Rx<bool> isActiveButtonIncome = Rx<bool>(true);
   final Rx<bool> isActiveButtonExpense = Rx<bool>(false);
 
+  final RxList<TransactionModel> transactionList = RxList<TransactionModel>([]);
+
   void getUid() {
     _uid.value = _auth.currentUser!.uid;
     update();
@@ -62,6 +65,17 @@ class TransactionController extends GetxController {
     update();
   }
 
+  Stream<List<TransactionModel>> transactionsStream() {
+    return _database
+        .collection('transactions')
+        .where('userId', isEqualTo: _uid.value)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => TransactionModel.fromJson(doc.data()))
+            .toList());
+  }
+
   Future<void> addTransaction(BuildContext context) async {
     try {
       final TransactionModel transaction = TransactionModel(
@@ -73,6 +87,8 @@ class TransactionController extends GetxController {
             ? 'income'
             : 'expense',
         userId: _uid.value,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
       await _database
           .collection('transactions')
@@ -107,6 +123,22 @@ class TransactionController extends GetxController {
     } catch (e) {
       print(e);
       showSnackbar(message: "Something went wrong", style: SnackBarStyle.error);
+    }
+  }
+
+  Future<void> getListTransaction() async {
+    try {
+      // final List<TransactionModel> transactions = [];
+      final snapshot = await _database
+          .collection('transactions')
+          .where('userId', isEqualTo: _uid.value)
+          .get();
+      snapshot.docs.forEach((element) {
+        transactionList.add(TransactionModel.fromJson(element.data()));
+      });
+      print(transactionList.length);
+    } catch (e) {
+      print(e);
     }
   }
 }

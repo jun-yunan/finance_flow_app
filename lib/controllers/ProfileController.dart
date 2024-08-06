@@ -15,8 +15,9 @@ class ProfileController extends GetxController {
     // TODO: implement onInit
     await getUid();
     await getProfile();
-    userStream.bindStream(db.collection('users').doc(uid.value).snapshots());
-
+    streamUser(uid.value).listen((event) {
+      user.value = event;
+    });
     super.onInit();
   }
 
@@ -40,6 +41,12 @@ class ProfileController extends GetxController {
   final Rx<XFile?> image = Rx<XFile?>(null);
 
   final FirebaseStorage storage = FirebaseStorage.instance;
+
+  Stream<UserModel> streamUser(String userId) {
+    return db.collection('users').doc(userId).snapshots().map((docSnapshot) {
+      return UserModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
+    });
+  }
 
   void updateUser(UserModel userUpdate) {
     user.value = userUpdate;
@@ -126,22 +133,12 @@ class ProfileController extends GetxController {
     required String mobileNumber,
   }) async {
     try {
-      final UserModel userUpdate = UserModel(
-        id: uid.value,
-        email: user.value!.email,
-        name: name,
-        dateOfBirth: DateTime.parse(dateOfBirth),
-        mobileNumber: mobileNumber,
-        avatar: user.value!.avatar,
-        address: "",
-        updatedAt: DateTime.now(),
-        createdAt: user.value!.createdAt,
-      );
-      await db
-          .collection('users')
-          .doc(uid.value)
-          .update(userUpdate.toJson())
-          .then((value) {
+      await db.collection('users').doc(uid.value).update({
+        'name': name,
+        'dateOfBirth': dateOfBirth,
+        'mobileNumber': mobileNumber,
+        'updatedAt': DateTime.now().toIso8601String(),
+      }).then((value) {
         showSnackbar(
             message: "Update profile successfully",
             style: SnackBarStyle.success);

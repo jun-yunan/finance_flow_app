@@ -1,6 +1,9 @@
-import 'package:finance_flow_app/components/home/label-item.dart';
 import 'package:finance_flow_app/components/home/segmented-time-frame.dart';
+import 'package:finance_flow_app/components/home/stream-builder-transactions.dart';
+import 'package:finance_flow_app/controllers/ProfileController.dart';
+import 'package:finance_flow_app/controllers/TransactionController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,9 +13,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isDaily = false;
+  // bool _isDaily = false;
+  final TransactionController transactionController =
+      Get.put(TransactionController());
+  final ProfileController profileController = Get.put(ProfileController());
+
+  // final profileController = Get.find<ProfileController>();
+
   @override
   Widget build(BuildContext context) {
+    print(profileController.user.value?.name);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -39,17 +49,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Hi, Welcome Back",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
+                              Obx(() => Text(
+                                    "Hi ${profileController.user.value?.name}, Welcome Back",
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )),
+                              const Text(
                                 "Good Morning",
                                 style: TextStyle(
                                   fontSize: 14,
@@ -100,12 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                              const Text(
-                                "\$7,783.00",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xffF1FFF3),
+                              Obx(
+                                () => Text(
+                                  "\$${profileController.user.value?.balance}",
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xffF1FFF3),
+                                  ),
                                 ),
                               )
                             ],
@@ -221,17 +233,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 child: ListView(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 152,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(31),
-                        color: const Color(0xff00d09e),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const SegmentedTimeFrame()
+                  children: const [
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   height: 152,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(31),
+                    //     color: const Color(0xff00d09e),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 20),
+                    SegmentedTimeFrame(),
+                    SizedBox(height: 20),
+                    StreamBuilderTransaction(),
                   ],
                 ),
               ),

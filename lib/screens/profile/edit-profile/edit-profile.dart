@@ -12,8 +12,9 @@ class EditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
 
-    final user = UserModel.fromJson(
-        profileController.userStream.value!.data() as Map<String, dynamic>);
+    // final user = UserModel.fromJson(
+    //     profileController.userStream.value!.data() as Map<String, dynamic>);
+    final user = profileController.user.value!;
 
     print("bla ${user.name}");
     return Scaffold(

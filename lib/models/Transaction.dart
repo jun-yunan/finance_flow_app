@@ -6,6 +6,9 @@ class TransactionModel {
   final String category;
   final String transactionType;
   final String userId; // ID của người dùng liên quan
+  final String? note;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   TransactionModel({
     this.id,
@@ -15,6 +18,9 @@ class TransactionModel {
     required this.category,
     required this.transactionType,
     required this.userId, // Khởi tạo thuộc tính userId
+    this.note,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +32,9 @@ class TransactionModel {
       'category': category,
       'transactionType': transactionType,
       'userId': userId, // Thêm userId vào JSON
+      'note': note,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
@@ -38,6 +47,9 @@ class TransactionModel {
       category: json['category'],
       transactionType: json['transactionType'],
       userId: json['userId'], // Đọc userId từ JSON
+      note: json['note'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
